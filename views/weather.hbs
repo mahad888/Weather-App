@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="weatherlogo.png" type="image/png">
+    
+    
+    
+   
+</head>
+<body>
+   
+    {{>navbar}}
+    <div class="container">
+        <div class="search-form">
+            <input type="text" id="cityName" placeholder="Enter city name" autocomplete="off">
+            <button type="submit" id="submitbtn">Search</button>
+        </div>
+        
+        <div class="weather-box">
+            <div id="weathericon">
+                <h1><i class="fa-regular fa-sun fa-lg" style="color: rgb(247, 211, 6);"></i></h1>
+            </div>
+            <div class="info">
+                <h2 class="location " id = "loc">
+                    <i class="fa-solid fa-street-view fa-lg"></i> City, Country
+                </h2>
+                <p><div id="date">Wed | Aug 09 | 1:08 AM</div></p>
+                <h1><div class="temp"id = "tempr">0 &deg; C</div></h1>
+                <h3><div class="tempminMax" id = "minmx">Min 0 &deg; C | Max 0 &deg; C </div></h3>
+            </div>
+        </div>
+    </div>
+    
+    {{>footer}}
+
+    <script >
+        
+        const submitBtn = document.getElementById("submitbtn");
+        const temp = document.getElementById("tempr");
+         const MinMax = document.getElementById("minmx");
+         const locat = document.getElementById("loc")
+         const city = document.getElementById("cityName");
+
+
+        const getInfo = async(event)=>{
+            event.preventDefault();
+
+            if(city.value=== ""){
+                alert("Please enter the city name");
+                console.log("hello g");
+
+            }
+
+            else{
+              
+
+                try{
+                    console.log("hello")
+                     let url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&appid=e1a1c2bc1fa3cae8e3dc20d434a74ad5`
+
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    let arrayData = [data];
+                    console.log(arrayData);
+                    arrayData.map((elements)=>{
+                        temp.innerText = `${elements.main.temp}°C` 
+                        MinMax.innerText = `Min ${elements.main.temp_min} °C | Max ${elements.main.temp_max} °C `;
+                        locat.innerHTML = ` <i class= 'fa-solid fa-street-view fa-lg'></i> ${elements.name}, ${elements.sys.country}`
+                        
+                    })
+                    
+                }
+                catch{
+                    alert("Please enter the city name properly");
+                }
+               
+            }
+            
+
+
+        }
+        submitBtn.addEventListener("click",getInfo)
+
+
+    </script>
+
+</body>
+</html>
